@@ -1,0 +1,11 @@
+{
+  "name": "wings-of-the-points",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/Siriolabs/Wings-of-the-Points",
+  "author": "Martin Gao <marting.gao@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.15.2"
+  }
+}
