@@ -95,8 +95,8 @@
     'fallback':            '#9f9fa3'
   };
   var systems = [
-    { sc: 'citi', name: 'Citi - TYP'},
     { sc: 'chase', name: 'Chase - UR'},
+    { sc: 'citi', name: 'Citi - TYP'},
     { sc: 'amex', name: 'Amex - MR'},
     { sc: 'spg', name: 'SPG'},
     { sc: 'marriott', name: 'Marriott'},
@@ -331,11 +331,12 @@
     }),
   ]);
 
-  console.log(flatRelations);
+  // flatRelations = _.orderBy(flatRelations, 's');
+  // console.log(flatRelations);
 
   let left = 0;
   let right = 0;
-  console.log('Num of flatRelations', flatRelations.length);
+  // console.log('Num of flatRelations', flatRelations.length);
   var links = _.map(flatRelations, o => {
     if (o.type === 'starAlliance' || o.type === 'nonAliance') {
       left += 1;
@@ -349,10 +350,11 @@
     var value = 1 / _.filter(flatRelations, oo => oo.t === o.t).length;
     return { source, target, value };
   });
-  console.log(left, right);
+  // console.log(left, right);
 
   links = _.orderBy(links, 'target.sc');
-  console.log('links', links);
+  // console.log('links', links);
+  // console.log('nodes', nodes);
 
   var data = {
     nodes, links,
@@ -544,7 +546,7 @@
   _.map(flatAirlines, o => {
     const iata = o.name.toLowerCase().match(/\[.{2}\]/)[0].replace('[', '').replace(']', '').toUpperCase();
     const dataId = `[data-node-id="${o.name.toLowerCase().replace(/\s/g, '-')}"]`
-    console.log(`${dataId} rect`, o);
+    // console.log(`${dataId} rect`, o);
     if(iata === 'WN') {
       SVG.select(`${dataId} rect.airlineLogo`).fill(SVG('fake').image(`https://lh3.googleusercontent.com/IpiXqIBr4B99QOtMfEvSDuexAjfU_4_iIoavrTl_b4k9UGXWFONBvnScETl0UDsVdg=w300`, 15, 15));
     } else {
