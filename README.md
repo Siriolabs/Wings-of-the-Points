@@ -10,4 +10,6 @@ The transfer ratio of SPG has already considered the 5,000 bonus Starpoints for 
 
 * Martin Gao (The original author and the owner of this chart)
 
-* [Runjie Guan](http://anoxic.me) (Added the rate transfer box to the chart)
+* [Runjie Guan](http://anoxic.me) (Added the transfer rate box to the chart)
+
+* US Credit Card Guide (https://www.uscreditcardguide.com) (Proposed this idea)
