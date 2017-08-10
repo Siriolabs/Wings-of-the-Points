@@ -332,7 +332,8 @@
   ]);
 
   // flatRelations = _.orderBy(flatRelations, 's');
-  // console.log(flatRelations);
+  console.log(flatRelations);
+  flatRelations = _.filter(flatRelations, o => { console.log(o); return o.s !== 'marriott' })
 
   let left = 0;
   let right = 0;
