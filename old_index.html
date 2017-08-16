@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Wings of the Points</title>
+  <script src="https://d3js.org/d3.v3.min.js"></script>
+  <script src="https://cdn.rawgit.com/newrelic-forks/d3-plugins-sankey/master/sankey.js"></script>
+  <script src="https://cdn.rawgit.com/misoproject/d3.chart/master/d3.chart.min.js"></script>
+  <!-- <script src="/d3.chart.sankey.js"></script> -->
+  <script>
+  !function(b,c){if("object"==typeof exports&&"object"==typeof module)module.exports=c(require("d3"),require("d3.chart"));else if("function"==typeof define&&define.amd)define(["d3","d3.chart"],c);else{var d="object"==typeof exports?c(require("d3"),require("d3.chart")):c(b.d3,b.d3.chart);for(var e in d)("object"==typeof exports?exports:b)[e]=d[e]}}(this,function(a,b){return function(a){function c(d){if(b[d])return b[d].exports;var e=b[d]={exports:{},id:d,loaded:!1};return a[d].call(e.exports,e,e.exports,c),e.loaded=!0,e.exports}var b={};return c.m=a,c.c=b,c.p="",c(0)}([function(a,b,c){"use strict";var d=c(1);d.Sankey=d,d.Base=c(4),d.Selection=c(6),d.Path=c(7),a.exports=d},function(a,b,c){"use strict";var d=c(2),e=c(3),f=c(4);a.exports=f.extend("Sankey",{initialize:function(){function b(b){var c=a.features.alignLabel;return"function"==typeof c&&(c=c(b)),"auto"===c&&(c=b.x<a.features.width/2?"start":"end"),c}function c(b){return"function"==typeof a.features.colorNodes?a.features.colorNodes(a.features.name(b),b):a.features.colorNodes}function f(b){return"function"==typeof a.features.colorLinks?a.features.colorLinks(b):a.features.colorLinks}var a=this;a.d3.sankey=e(),a.d3.path=a.d3.sankey.link(),a.d3.sankey.size([a.features.width,a.features.height]),a.features.spread=!1,a.features.iterations=32,a.features.nodeWidth=a.d3.sankey.nodeWidth(),a.features.nodePadding=a.d3.sankey.nodePadding(),a.features.alignLabel="auto",a.layers.links=a.layers.base.append("g").classed("links",!0),a.layers.nodes=a.layers.base.append("g").classed("nodes",!0),a.on("change:sizes",function(){a.d3.sankey.nodeWidth(a.features.nodeWidth),a.d3.sankey.nodePadding(a.features.nodePadding)}),a.layer("links",a.layers.links,{dataBind:function(a){return this.selectAll(".link").data(a.links)},insert:function(){return this.append("path").classed("link",!0)},events:{enter:function(){this.on("mouseover",function(b){a.trigger("link:mouseover",b)}),this.on("mouseout",function(b){a.trigger("link:mouseout",b)}),this.on("click",function(b){a.trigger("link:click",b)})},merge:function(){this.attr("d",a.d3.path).style("stroke",f).style("stroke-width",function(a){return Math.max(1,a.dy)}).sort(function(a,b){return b.dy-a.dy})},exit:function(){this.remove()}}}),a.layer("nodes",a.layers.nodes,{dataBind:function(a){return this.selectAll(".node").data(a.nodes)},insert:function(){return this.append("g").classed("node",!0).attr("data-node-id",function(a){return a.id})},events:{enter:function(){this.append("rect").attr("class","allianceLogo"),this.append("rect").attr("class","airlineLogo"),this.append("text").attr("dy",".35em").attr("transform",null),this.on("mouseover",function(b){a.trigger("node:mouseover",b)}),this.on("mouseout",function(b){a.trigger("node:mouseout",b)}),this.on("click",function(b){a.trigger("node:click",b)})},merge:function(){this.attr("transform",function(a){return"translate("+a.x+","+a.y+")"}),this.selectAll("rect").filter(".allianceLogo").attr("height",function(a){return 15}).attr("width",a.features.nodeWidth).style("fill",c).style("stroke",function(a){return d.rgb(c(a)).darker(2)}),this.selectAll("rect").filter(".airlineLogo").attr("height",function(a){return a.name.indexOf("[")>=0?15:a.dy}).attr("width",a.features.nodeWidth).attr("x",function(a){return a.name.indexOf("[")>=0?"start"===b(a)?15:-15:0}).style("fill",c).style("stroke",function(a){return d.rgb(c(a)).darker(2)}),this.select("text").text(a.features.name).attr("y",function(a){return a.dy/2}).attr("x",function(a){return a.name.indexOf("[")>=0?"start"===b(a)?35:-20:20}).attr("text-anchor",b)},exit:function(){this.remove()}}})},transform:function(a){var b=this;return b.data=a,b.d3.sankey.nodes(a.nodes).links(a.links).layout(b.features.iterations),this.features.spread&&(this._spreadNodes(a),b.d3.sankey.relayout()),a},iterations:function(a){return arguments.length?(this.features.iterations=a,this.data&&this.draw(this.data),this):this.features.iterations},nodeWidth:function(a){return arguments.length?(this.features.nodeWidth=a,this.trigger("change:sizes"),this.data&&this.draw(this.data),this):this.features.nodeWidth},nodePadding:function(a){return arguments.length?(this.features.nodePadding=a,this.trigger("change:sizes"),this.data&&this.draw(this.data),this):this.features.nodePadding},spread:function(a){return arguments.length?(this.features.spread=a,this.data&&this.draw(this.data),this):this.features.spread},alignLabel:function(a){return arguments.length?(this.features.alignLabel=a,this.data&&this.draw(this.data),this):this.features.alignLabel},_spreadNodes:function(a){var b=this,c=d.nest().key(function(a){return a.x}).entries(a.nodes).map(function(a){return a.values});c.forEach(function(a){var c,e,f=d.sum(a,function(a){return a.dy}),g=(b.features.height-f)/a.length,h=0;for(a.sort(function(a,b){return a.y-b.y}),c=0;c<a.length;++c)e=a[c],e.y=h,h+=e.dy+g})}})},function(b,c){b.exports=a},function(a,b,c){var d=c(2);d.sankey=function(){function h(){f.forEach(function(a){a.sourceLinks=[],a.targetLinks=[]}),g.forEach(function(a){var b=a.source,c=a.target;"number"==typeof b&&(b=a.source=f[a.source]),"number"==typeof c&&(c=a.target=f[a.target]),b.sourceLinks.push(a),c.targetLinks.push(a)})}function i(){f.forEach(function(a){a.value=Math.max(d.sum(a.sourceLinks,q),d.sum(a.targetLinks,q))})}function j(){for(var c,a=f,d=0;a.length;)c=[],a.forEach(function(a){a.x=d,a.dx=b,a.sourceLinks.forEach(function(a){c.push(a.target)})}),a=c,++d;l(d),m((e[0]-b)/(d-1))}function l(a){f.forEach(function(b){b.sourceLinks.length||(b.x=a-1)})}function m(a){f.forEach(function(b){b.x*=a})}function n(a){function i(){var a=d.min(b,function(a){return(e[1]-(a.length-1)*c)/d.sum(a,q)});b.forEach(function(b){b.forEach(function(b,c){b.y=c,b.dy=b.value*a})}),g.forEach(function(b){b.dy=b.value*a})}function j(a){function c(a){return p(a.source)*a.value}b.forEach(function(b,e){b.forEach(function(b){if(b.targetLinks.length){var e=d.sum(b.targetLinks,c)/d.sum(b.targetLinks,q);b.y+=(e-p(b))*a}})})}function k(a){function c(a){return p(a.target)*a.value}b.slice().reverse().forEach(function(b){b.forEach(function(b){if(b.sourceLinks.length){var e=d.sum(b.sourceLinks,c)/d.sum(b.sourceLinks,q);b.y+=(e-p(b))*a}})})}function l(){b.forEach(function(a){var b,d,h,f=0,g=a.length;for(a.sort(m),h=0;h<g;++h)b=a[h],d=f-b.y,d>0&&(b.y+=d),f=b.y+b.dy+c;if(d=f-c-e[1],d>0)for(f=b.y-=d,h=g-2;h>=0;--h)b=a[h],d=b.y+b.dy+c-f,d>0&&(b.y-=d),f=b.y})}function m(a,b){return a.y-b.y}var b=d.nest().key(function(a){return a.x}).sortKeys(d.ascending).entries(f).map(function(a){return a.values});i(),l();for(var h=1;a>0;--a)k(h*=.99),l(),j(h),l()}function o(){function a(a,b){return a.source.y-b.source.y}function b(a,b){return a.target.y-b.target.y}f.forEach(function(c){c.sourceLinks.sort(b),c.targetLinks.sort(a)}),f.forEach(function(a){var b=0,c=0;a.sourceLinks.forEach(function(a){a.sy=b,b+=a.dy}),a.targetLinks.forEach(function(a){a.ty=c,c+=a.dy})})}function p(a){return a.y+a.dy/2}function q(a){return a.value}var a={},b=24,c=8,e=[1,1],f=[],g=[];return a.nodeWidth=function(c){return arguments.length?(b=+c,a):b},a.nodePadding=function(b){return arguments.length?(c=+b,a):c},a.nodes=function(b){return arguments.length?(f=b,a):f},a.links=function(b){return arguments.length?(g=b,a):g},a.size=function(b){return arguments.length?(e=b,a):e},a.layout=function(b){return h(),i(),j(),n(b),o(),a},a.relayout=function(){return o(),a},a.link=function(){function b(b){var c=b.source.x+b.source.dx,e=b.target.x,f=d.interpolateNumber(c,e),g=f(a),h=f(1-a),i=b.source.y+b.sy+b.dy/2,j=b.target.y+b.ty+b.dy/2;return"M"+c+","+i+"C"+g+","+i+" "+h+","+j+" "+e+","+j}var a=.5;return b.curvature=function(c){return arguments.length?(a=+c,b):a},b},a},a.exports=d.sankey},function(a,b,c){"use strict";var d=c(2),e=c(5);a.exports=e("Sankey.Base",{initialize:function(){var a=this;a.features={},a.d3={},a.layers={},a.base.attr("width")||a.base.attr("width",a.base.node().parentNode.clientWidth),a.base.attr("height")||a.base.attr("height",a.base.node().parentNode.clientHeight),a.features.margins={top:1,right:1,bottom:6,left:1},a.features.width=a.base.attr("width")-a.features.margins.left-a.features.margins.right,a.features.height=a.base.attr("height")-a.features.margins.top-a.features.margins.bottom,a.features.name=function(a){return a.name},a.features.colorNodes=d.scale.category20c(),a.features.colorLinks=null,a.layers.base=a.base.append("g").attr("transform","translate("+a.features.margins.left+","+a.features.margins.top+")")},name:function(a){return arguments.length?(this.features.name=a,this.trigger("change:name"),this.root&&this.draw(this.root),this):this.features.name},colorNodes:function(a){return arguments.length?(this.features.colorNodes=a,this.trigger("change:color"),this.root&&this.draw(this.root),this):this.features.colorNodes},colorLinks:function(a){return arguments.length?(this.features.colorLinks=a,this.trigger("change:color"),this.data&&this.draw(this.data),this):this.features.colorLinks}})},function(a,c){a.exports=b},function(a,b,c){"use strict";var d=c(1);a.exports=d.extend("Sankey.Selection",{initialize:function(){function b(){return a.features.selection&&a.features.selection.length?this.style("opacity",function(b){return a.features.selection.indexOf(b)>=0?1:a.features.unselectedOpacity}):this.style("opacity",1)}function c(){var c=a.layers.base.selectAll(".node, .link").transition();a.features.selection&&a.features.selection.length||(c=c.delay(100)),b.apply(c.duration(50))}var a=this;a.features.selection=null,a.features.unselectedOpacity=.2,a.on("link:mouseover",a.selection),a.on("link:mouseout",function(){a.selection(null)}),a.on("node:mouseover",a.selection),a.on("node:mouseout",function(){a.selection(null)}),a.on("change:selection",c),this.layer("links").on("enter",b),this.layer("nodes").on("enter",b)},selection:function(a){return arguments.length?(this.features.selection=!a||a instanceof Array?a:[a],this.trigger("change:selection"),this):this.features.selection},unselectedOpacity:function(a){return arguments.length?(this.features.unselectedOpacity=a,this.trigger("change:selection"),this):this.features.unselectedOpacity}})},function(a,b,c){"use strict";function e(a,b){return a.source&&a.target?f(a,b):g(a,b)}function f(a,b){var c=[a];return b=b||"both","source"!=b&&"both"!=b||(c=c.concat(g(a.source,"source"))),"target"!=b&&"both"!=b||(c=c.concat(g(a.target,"target"))),c}function g(a,b){var c=[a];return b=b||"both",("source"==b&&a.sourceLinks.length<2||"both"==b)&&a.targetLinks.forEach(function(a){c=c.concat(f(a,b))}),("target"==b&&a.targetLinks.length<2||"both"==b)&&a.sourceLinks.forEach(function(a){c=c.concat(f(a,b))}),c}var d=c(6);a.exports=d.extend("Sankey.Path",{selection:function(a){var b=this;return arguments.length?(b.features.selection=!a||a instanceof Array?a:[a],b.features.selection&&b.features.selection.forEach(function(a){e(a).forEach(function(a){b.features.selection.push(a)})}),b.trigger("change:selection"),b):b.features.selection}})}])});
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/components/label.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/components/header.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/6.0.0/normalize.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.5.1/svg.min.js"></script>
+  <style>
+  body {
+    padding: 10px;
+    max-width: 1600px;
+    margin: auto;
+  }
+  #chart {
+    height: 90vh;
+    font: 13px sans-serif;
+  }
+  .node rect {
+    fill-opacity: .9;
+    shape-rendering: crispEdges;
+    stroke-width: 0;
+  }
+  .node text {
+    text-shadow: 0 1px 0 #fff;
+  }
+  .link {
+    fill: none;
+    stroke: #000;
+    stroke-opacity: .2;
+  }
+  #box {
+    height: 20px;
+    border: 1px solid;
+    background-color: #fff;
+    display: none;
+    position: absolute;
+    padding: 10px;
+    font-family: sans-serif;
+    top: 0;
+    pointer-events: none;
+  }
+  a:visited{
+    color: blue;
+  }
+  </style>
+</head>
+<body>
+  <div id="fake" style="display: none;">
+
+  </div>
+  <div class="row col-xs-12 center-xs middle-xs">
+    <div class="ui header large" style="margin-bottom: 10px;">Wings of the Points</div>
+  </div>
+  <div id="chart"></div>
+  <div id="box"></div>
+  <div class="row col-xs-12 center-xs middle-xs" style="text-decoration: none;">
+    <div>
+      <a target="_blank"  rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/" style="text-decoration: none;">
+        <img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png" />
+      </a>
+      <span style="margin: 0 0.5rem;">|</span>
+      Copyright © 2017
+      <a target="_blank" href="http://www.yeekapp.com/?utm_source=uscreditcardguide&utm_medium=article&utm_campaign=wings-the-points-chart"  style="text-decoration: none;">
+        www.yeekapp.com
+      </a>
+      <span style="margin: 0 0.5rem;">|</span>
+      <a target="_blank" href="https://github.com/Siriolabs/Wings-of-the-Points"  style="text-decoration: none;">
+       Github Repo
+      </a>
+      <span style="margin: 0 0.5rem;">|</span>
+      <a target="_blank" href="https://github.com/Siriolabs/Wings-of-the-Points#contributors" style="text-decoration: none;">
+       ❤️ Contributors
+      </a>
+    </div>
+  </div>
+  <script>
+  var colors = {
+    'environment':         '#edbd00',
+    'social':              '#367d85',
+    'animals':             '#97ba4c',
+    'health':              '#f5662b',
+    'research_ingredient': '#3f3e47',
+    'fallback':            '#9f9fa3'
+  };
+  var systems = [
+    { sc: 'chase', name: 'Chase - UR'},
+    { sc: 'citi', name: 'Citi - TYP'},
+    { sc: 'amex', name: 'Amex - MR'},
+    { sc: 'spg', name: 'SPG'},
+    { sc: 'marriott', name: 'Marriott'},
+    { sc: 'none', name: 'N/A'},
+  ]
+  var airlines = [
+    {
+      type: 'nonAliance',
+      airlines: [
+        { color: '#1565C0', sc: 'as', name: 'Alaska Airlines', },
+        { color: '#1565C0', sc: 'ek', name: 'Emirates', },
+        { color: '#1565C0', sc: 'ly', name: 'El Al', },
+        { color: '#1565C0', sc: 'ey', name: 'Etihad', },
+        { color: '#1565C0', sc: 'f9', name: 'Frontier', },
+        { color: '#1565C0', sc: 'g3', name: 'GOL', },
+        { color: '#1565C0', sc: 'hu', name: 'Hainan Airlines', },
+        { color: '#1565C0', sc: 'ha', name: 'Hawaiian Airlines', },
+        { color: '#1565C0', sc: 'b6', name: 'jetBlue', },
+        { color: '#1565C0', sc: 'wn', name: 'Southwest', },
+        { color: '#1565C0', sc: 'vs', name: 'Virgin Altanic', },
+        { color: '#1565C0', sc: 'va', name: 'Virgin Australia', },
+        { color: '#1565C0', sc: 'vx', name: 'Virgin America', },
+      ]
+    },
+    {
+      type: 'oneworld',
+      airlines: [
+        { color: '#00695C', sc: 'ab', name: 'Air Berlin', },
+        { color: '#00695C', sc: 'aa', name: 'American Airlines', },
+        { color: '#00695C', sc: 'ba', name: 'British Airways', },
+        { color: '#00695C', sc: 'cx', name: 'Cathay Pacific', },
+        { color: '#00695C', sc: 'ay', name: 'Finnair', },
+        { color: '#00695C', sc: 'ib', name: 'Iberia', },
+        { color: '#00695C', sc: 'jl', name: 'Japan Airlines', },
+        { color: '#00695C', sc: 'la', name: 'LAN Airlines', },
+        { color: '#00695C', sc: 'jj', name: 'TAM Airlines', },
+        { color: '#00695C', sc: 'mh', name: 'Malaysia Airlines', },
+        { color: '#00695C', sc: 'qf', name: 'Qantas', },
+        { color: '#00695C', sc: 'qr', name: 'Qatar', },
+        { color: '#00695C', sc: 'rj', name: 'Royal Jordanian', },
+        { color: '#00695C', sc: 's7', name: 'S7 Airlines', },
+        { color: '#00695C', sc: 'ul', name: 'SriLankan Airlines', },
+      ]
+    },
+    {
+      type: 'skyteam',
+      airlines: [
+        { color: '#D84315', sc: 'su', name: 'Aeroflot', },
+        { color: '#D84315', sc: 'ar', name: 'Aerolíneas Argentinas', },
+        { color: '#D84315', sc: 'am', name: 'Aeroméxico', },
+        { color: '#D84315', sc: 'ux', name: 'Air Europa', },
+        { color: '#D84315', sc: 'af', name: 'Air France', },
+        { color: '#D84315', sc: 'az', name: 'Alitalia', },
+        { color: '#D84315', sc: 'ci', name: 'China Airlines', },
+        { color: '#D84315', sc: 'mu', name: 'China Eastern Airlines', },
+        { color: '#D84315', sc: 'cz', name: 'China Southern Airlines', },
+        { color: '#D84315', sc: 'ok', name: 'Czech Airlines', },
+        { color: '#D84315', sc: 'dl', name: 'Delta Air Lines', },
+        { color: '#D84315', sc: 'ga', name: 'Garuda Indonesia', },
+        { color: '#D84315', sc: 'kq', name: 'Kenya Airways', },
+        { color: '#D84315', sc: 'kl', name: 'KLM', },
+        { color: '#D84315', sc: 'ke', name: 'Korean Air', },
+        { color: '#D84315', sc: 'me', name: 'Middle East Airlines', },
+        { color: '#D84315', sc: 'sv', name: 'Saudia', },
+        { color: '#D84315', sc: 'ro', name: 'TAROM', },
+        { color: '#D84315', sc: 'vn', name: 'Vietnam Airlines', },
+        { color: '#D84315', sc: 'mf', name: 'Xiamen Airlines', },
+      ]
+    },
+    {
+      type: 'starAlliance',
+      airlines: [
+        { color: '#FFD600', sc: 'jp', name: 'Adria Airways', },
+        { color: '#FFD600', sc: 'a3', name: 'Aegean Airlines', },
+        { color: '#FFD600', sc: 'ac', name: 'Air Canada', },
+        { color: '#FFD600', sc: 'ca', name: 'Air China', },
+        { color: '#FFD600', sc: 'ai', name: 'Air India', },
+        { color: '#FFD600', sc: 'nz', name: 'Air New Zealand', },
+        { color: '#FFD600', sc: 'nh', name: 'All Nippon Airways', },
+        { color: '#FFD600', sc: 'oz', name: 'Asiana Airlines', },
+        { color: '#FFD600', sc: 'os', name: 'Austrian Airlines', },
+        { color: '#FFD600', sc: 'av', name: 'Avianca', },
+        { color: '#FFD600', sc: 'sn', name: 'Brussels Airlines', },
+        { color: '#FFD600', sc: 'cm', name: 'Copa Airlines', },
+        { color: '#FFD600', sc: 'ou', name: 'Croatia Airlines', },
+        { color: '#FFD600', sc: 'ms', name: 'EgyptAir', },
+        { color: '#FFD600', sc: 'et', name: 'Ethiopian Airlines', },
+        { color: '#FFD600', sc: 'br', name: 'EVA Air', },
+        { color: '#FFD600', sc: 'lo', name: 'LOT Polish Airlines', },
+        { color: '#FFD600', sc: 'lh', name: 'Lufthansa', },
+        { color: '#FFD600', sc: 'sk', name: 'Scandinavian Airlines', },
+        { color: '#FFD600', sc: 'zh', name: 'Shenzhen Airlines', },
+        { color: '#FFD600', sc: 'sq', name: 'Singapore Airlines', },
+        { color: '#FFD600', sc: 'sa', name: 'South African Airways', },
+        { color: '#FFD600', sc: 'lx', name: 'Swiss International Air Lines', },
+        { color: '#FFD600', sc: 'tp', name: 'TAP Portugal', },
+        { color: '#FFD600', sc: 'tg', name: 'Thai Airways', },
+        { color: '#FFD600', sc: 'tk', name: 'Turkish Airlines', },
+        { color: '#FFD600', sc: 'ua', name: 'United Airlines', },
+      ]
+    },
+
+  ];
+  var flatAirlines = _.flatten([
+    _.map(_.find(airlines, o => o.type === 'nonAliance').airlines, o => Object.assign(o, { type: 'nonAliance'})),
+    _.map(_.find(airlines, o => o.type === 'oneworld').airlines, o => Object.assign(o, { type: 'oneworld'})),
+    _.map(_.find(airlines, o => o.type === 'skyteam').airlines, o => Object.assign(o, { type: 'skyteam'})),
+    _.map(_.find(airlines, o => o.type === 'starAlliance').airlines, o => Object.assign(o, { type: 'starAlliance'})),
+  ]);
+  flatAirlines = _.map(flatAirlines, o => {
+    // if (o.type === 'starAlliance' || o.type === 'nonAliance') {
+    // } else {
+    //   return Object.assign(o, { name: `[${o.sc.toUpperCase()}] ${o.name}`})
+    // }
+    return Object.assign(o, { name: `${o.name} [${o.sc.toUpperCase()}] `})
+  });
+
+  var temp1 = _.map(systems, o => ({ sc: o.sc, name: o.name, id: o.name.replace('-', '').replace(/\s+/g, '-').toLowerCase() }));
+  var temp2 = _.map(_.find(airlines, o => o.type === 'nonAliance').airlines, o => ({ sc: o.sc, name: o.name, id: o.name.replace('-', '').replace(/\s+/g, '-').toLowerCase() }));
+  var temp3 = _.map(_.find(airlines, o => o.type === 'oneworld').airlines, o => ({ sc: o.sc, name: o.name, id: o.name.replace('-', '').replace(/\s+/g, '-').toLowerCase() }));
+  var temp4 = _.map(_.find(airlines, o => o.type === 'skyteam').airlines, o => ({ sc: o.sc, name: o.name, id: o.name.replace('-', '').replace(/\s+/g, '-').toLowerCase() }));
+  var temp5 = _.map(_.find(airlines, o => o.type === 'starAlliance').airlines, o => ({ sc: o.sc, name: o.name, id: o.name.replace('-', '').replace(/\s+/g, '-').toLowerCase() }));
+  var nodes = temp1.concat(temp2).concat(temp3).concat(temp4).concat(temp5);
+  // console.log(nodes);
+
+  var relations = [{
+    type: 'nonAliance',
+    relations: [
+      [{ s: 'amex', t: 'as', f: 0 }, { s: 'citi', t: 'as', f: 0 }, { s: 'chase', t: 'as', f: 0 }, { s: 'spg', t: 'as', f: 1 }, { s: 'marriott', t: 'as', f: 1 }],
+      [{ s: 'amex', t: 'ek', f: 1 }, { s: 'citi', t: 'ek', f: 0 }, { s: 'chase', t: 'ek', f: 0 }, { s: 'spg', t: 'ek', f: 1 }, { s: 'marriott', t: 'ek', f: 1 }],
+      [{ s: 'amex', t: 'ly', f: 1 }, { s: 'citi', t: 'ly', f: 0 }, { s: 'chase', t: 'ly', f: 0 }, { s: 'spg', t: 'ly', f: 0 }, { s: 'marriott', t: 'ly', f: 0 }],
+      [{ s: 'amex', t: 'ey', f: 1 }, { s: 'citi', t: 'ey', f: 1 }, { s: 'chase', t: 'ey', f: 0 }, { s: 'spg', t: 'ey', f: 1 }, { s: 'marriott', t: 'ey', f: 1 }],
+      [{ s: 'amex', t: 'f9', f: 0 }, { s: 'citi', t: 'f9', f: 0 }, { s: 'chase', t: 'f9', f: 0 }, { s: 'spg', t: 'f9', f: 0 }, { s: 'marriott', t: 'f9', f: 1 }],
+      [{ s: 'amex', t: 'g3', f: 0 }, { s: 'citi', t: 'g3', f: 0 }, { s: 'chase', t: 'g3', f: 0 }, { s: 'spg', t: 'g3', f: 1 }, { s: 'marriott', t: 'g3', f: 1 }],
+      [{ s: 'amex', t: 'hu', f: 0 }, { s: 'citi', t: 'hu', f: 0 }, { s: 'chase', t: 'hu', f: 0 }, { s: 'spg', t: 'hu', f: 1 }, { s: 'marriott', t: 'hu', f: 0 }],
+      [{ s: 'amex', t: 'ha', f: 1 }, { s: 'citi', t: 'ha', f: 0 }, { s: 'chase', t: 'ha', f: 0 }, { s: 'spg', t: 'ha', f: 1 }, { s: 'marriott', t: 'ha', f: 1 }],
+      [{ s: 'amex', t: 'b6', f: 1 }, { s: 'citi', t: 'b6', f: 1 }, { s: 'chase', t: 'b6', f: 0 }, { s: 'spg', t: 'b6', f: 0 }, { s: 'marriott', t: 'b6', f: 1 }],
+      [{ s: 'amex', t: 'wn', f: 0 }, { s: 'citi', t: 'wn', f: 0 }, { s: 'chase', t: 'wn', f: 1 }, { s: 'spg', t: 'wn', f: 0 }, { s: 'marriott', t: 'wn', f: 1 }],
+      [{ s: 'amex', t: 'vs', f: 1 }, { s: 'citi', t: 'vs', f: 1 }, { s: 'chase', t: 'vs', f: 1 }, { s: 'spg', t: 'vs', f: 1 }, { s: 'marriott', t: 'vs', f: 1 }],
+      [{ s: 'amex', t: 'va', f: 0 }, { s: 'citi', t: 'va', f: 0 }, { s: 'chase', t: 'va', f: 0 }, { s: 'spg', t: 'va', f: 1 }, { s: 'marriott', t: 'va', f: 0 }],
+      [{ s: 'amex', t: 'vx', f: 1 }, { s: 'citi', t: 'vx', f: 0 }, { s: 'chase', t: 'vx', f: 0 }, { s: 'spg', t: 'vx', f: 0 }, { s: 'marriott', t: 'vx', f: 1 }],
+    ]
+  }, {
+    type: 'oneworld',
+    relations: [
+      { s: 'spg', t: 'ab'}, { s: 'marriott', t: 'ab'},
+      { s: 'spg', t: 'aa'}, { s: 'marriott', t: 'aa'},
+      { s: 'spg', t: 'ba'}, { s: 'chase', t: 'ba'}, { s: 'amex', t: 'ba'}, { s: 'marriott', t: 'ba'},
+      { s: 'spg', t: 'cx'}, { s: 'citi', t: 'cx'}, { s: 'marriott', t: 'cx'}, { s: 'amex', t: 'cx'},
+      { s: 'none', t: 'ay'},
+      { s: 'amex', t: 'ib'}, { s: 'marriott', t: 'ib'},
+      { s: 'spg', t: 'jl'}, { s: 'marriott', t: 'jl'},
+      { s: 'spg', t: 'la'}, { s: 'marriott', t: 'la'},
+      { s: 'none', t: 'jj'},
+      { s: 'citi', t: 'mh'},
+      { s: 'citi', t: 'qf'}, { s: 'marriott', t: 'qf'},
+      { s: 'citi', t: 'qr'}, { s: 'spg', t: 'qr'}, { s: 'marriott', t: 'qr'},
+      { s: 'none', t: 'rj'},
+      { s: 'none', t: 's7'},
+      { s: 'none', t: 'ul'},
+    ]
+
+  }, {
+    type: 'skyteam',
+    relations: [
+      { s: 'marriott', t: 'su'},
+      { s: 'none', t: 'ar'},
+      { s: 'spg', t: 'am'}, { s: 'amex', t: 'am'}, { s: 'marriott', t: 'am'},
+      { s: 'none', t: 'ux'},
+      { s: 'spg', t: 'af'}, { s: 'amex', t: 'af'}, { s: 'citi', t: 'af'}, { s: 'chase', t: 'af'}, { s: 'marriott', t: 'af'},
+      { s: 'spg', t: 'az'}, { s: 'amex', t: 'az'},
+      { s: 'none', t: 'ci'},
+      { s: 'spg', t: 'mu'}, { s: 'marriott', t: 'mu'},
+      { s: 'spg', t: 'cz'}, { s: 'marriott', t: 'cz'},
+      { s: 'none', t: 'ok'},
+      { s: 'spg', t: 'dl'}, { s: 'amex', t: 'dl'}, { s: 'marriott', t: 'dl'},
+      { s: 'citi', t: 'ga'},
+      { s: 'none', t: 'kq'},
+      { s: 'spg', t: 'kl'}, { s: 'amex', t: 'kl'}, { s: 'citi', t: 'kl'}, { s: 'chase', t: 'kl'}, { s: 'marriott', t: 'kl'},
+      { s: 'spg', t: 'ke'}, { s: 'chase', t: 'ke'}, { s: 'marriott', t: 'ke'},
+      { s: 'none', t: 'me'},
+      { s: 'spg', t: 'sv'}, { s: 'marriott', t: 'sv'},
+      { s: 'none', t: 'ro'},
+      { s: 'none', t: 'vn'},
+      { s: 'none', t: 'mf'},
+    ]
+  }, {
+    type: 'starAlliance',
+    relations: [
+      [{ s: 'amex', t: 'jp', f: 0 }, { s: 'citi', t: 'jp', f: 0 }, { s: 'chase', t: 'jp', f: 0 }, { s: 'spg', t: 'jp', f: 0 }, { s: 'marriott', t: 'jp', f: 0 }],
+      [{ s: 'amex', t: 'a3', f: 0 }, { s: 'citi', t: 'a3', f: 0 }, { s: 'chase', t: 'a3', f: 0 }, { s: 'spg', t: 'a3', f: 1 }, { s: 'marriott', t: 'a3', f: 0 }],
+      [{ s: 'amex', t: 'ac', f: 1 }, { s: 'citi', t: 'ac', f: 0 }, { s: 'chase', t: 'ac', f: 0 }, { s: 'spg', t: 'ac', f: 1 }, { s: 'marriott', t: 'ac', f: 1 }],
+      [{ s: 'amex', t: 'ca', f: 0 }, { s: 'citi', t: 'ca', f: 0 }, { s: 'chase', t: 'ca', f: 0 }, { s: 'spg', t: 'ca', f: 1 }, { s: 'marriott', t: 'ca', f: 1 }],
+      [{ s: 'amex', t: 'ai', f: 0 }, { s: 'citi', t: 'ai', f: 0 }, { s: 'chase', t: 'ai', f: 0 }, { s: 'spg', t: 'ai', f: 0 }, { s: 'marriott', t: 'ai', f: 0 }],
+      [{ s: 'amex', t: 'nz', f: 0 }, { s: 'citi', t: 'nz', f: 0 }, { s: 'chase', t: 'nz', f: 0 }, { s: 'spg', t: 'nz', f: 1 }, { s: 'marriott', t: 'nz', f: 0 }],
+      [{ s: 'amex', t: 'nh', f: 1 }, { s: 'citi', t: 'nh', f: 0 }, { s: 'chase', t: 'nh', f: 0 }, { s: 'spg', t: 'nh', f: 1 }, { s: 'marriott', t: 'nh', f: 0 }],
+      [{ s: 'amex', t: 'oz', f: 0 }, { s: 'citi', t: 'oz', f: 0 }, { s: 'chase', t: 'oz', f: 0 }, { s: 'spg', t: 'oz', f: 1 }, { s: 'marriott', t: 'oz', f: 1 }],
+      [{ s: 'amex', t: 'os', f: 0 }, { s: 'citi', t: 'os', f: 0 }, { s: 'chase', t: 'os', f: 0 }, { s: 'spg', t: 'os', f: 0 }, { s: 'marriott', t: 'os', f: 0 }],
+      [{ s: 'amex', t: 'av', f: 0 }, { s: 'citi', t: 'av', f: 0 }, { s: 'chase', t: 'av', f: 0 }, { s: 'spg', t: 'av', f: 1 }, { s: 'marriott', t: 'av', f: 1 }],
+      [{ s: 'amex', t: 'sn', f: 0 }, { s: 'citi', t: 'sn', f: 0 }, { s: 'chase', t: 'sn', f: 0 }, { s: 'spg', t: 'sn', f: 0 }, { s: 'marriott', t: 'sn', f: 0 }],
+      [{ s: 'amex', t: 'cm', f: 0 }, { s: 'citi', t: 'cm', f: 0 }, { s: 'chase', t: 'cm', f: 0 }, { s: 'spg', t: 'cm', f: 0 }, { s: 'marriott', t: 'cm', f: 1 }],
+      [{ s: 'amex', t: 'ou', f: 0 }, { s: 'citi', t: 'ou', f: 0 }, { s: 'chase', t: 'ou', f: 0 }, { s: 'spg', t: 'ou', f: 0 }, { s: 'marriott', t: 'ou', f: 0 }],
+      [{ s: 'amex', t: 'ms', f: 0 }, { s: 'citi', t: 'ms', f: 0 }, { s: 'chase', t: 'ms', f: 0 }, { s: 'spg', t: 'ms', f: 0 }, { s: 'marriott', t: 'ms', f: 0 }],
+      [{ s: 'amex', t: 'et', f: 0 }, { s: 'citi', t: 'et', f: 0 }, { s: 'chase', t: 'et', f: 0 }, { s: 'spg', t: 'et', f: 0 }, { s: 'marriott', t: 'et', f: 0 }],
+      [{ s: 'amex', t: 'br', f: 0 }, { s: 'citi', t: 'br', f: 1 }, { s: 'chase', t: 'br', f: 0 }, { s: 'spg', t: 'br', f: 0 }, { s: 'marriott', t: 'br', f: 0 }],
+      [{ s: 'amex', t: 'lo', f: 0 }, { s: 'citi', t: 'lo', f: 0 }, { s: 'chase', t: 'lo', f: 0 }, { s: 'spg', t: 'lo', f: 0 }, { s: 'marriott', t: 'lo', f: 0 }],
+      [{ s: 'amex', t: 'lh', f: 0 }, { s: 'citi', t: 'lh', f: 0 }, { s: 'chase', t: 'lh', f: 0 }, { s: 'spg', t: 'lh', f: 1 }, { s: 'marriott', t: 'lh', f: 1 }],
+      [{ s: 'amex', t: 'sk', f: 0 }, { s: 'citi', t: 'sk', f: 0 }, { s: 'chase', t: 'sk', f: 0 }, { s: 'spg', t: 'sk', f: 0 }, { s: 'marriott', t: 'sk', f: 0 }],
+      [{ s: 'amex', t: 'zh', f: 0 }, { s: 'citi', t: 'zh', f: 0 }, { s: 'chase', t: 'zh', f: 0 }, { s: 'spg', t: 'zh', f: 0 }, { s: 'marriott', t: 'zh', f: 0 }],
+      [{ s: 'amex', t: 'sq', f: 1 }, { s: 'citi', t: 'sq', f: 1 }, { s: 'chase', t: 'sq', f: 1 }, { s: 'spg', t: 'sq', f: 1 }, { s: 'marriott', t: 'sq', f: 1 }],
+      [{ s: 'amex', t: 'sa', f: 0 }, { s: 'citi', t: 'sa', f: 0 }, { s: 'chase', t: 'sa', f: 0 }, { s: 'spg', t: 'sa', f: 0 }, { s: 'marriott', t: 'sa', f: 1 }],
+      [{ s: 'amex', t: 'lx', f: 0 }, { s: 'citi', t: 'lx', f: 0 }, { s: 'chase', t: 'lx', f: 0 }, { s: 'spg', t: 'lx', f: 0 }, { s: 'marriott', t: 'lx', f: 0 }],
+      [{ s: 'amex', t: 'tp', f: 0 }, { s: 'citi', t: 'tp', f: 0 }, { s: 'chase', t: 'tp', f: 0 }, { s: 'spg', t: 'tp', f: 0 }, { s: 'marriott', t: 'tp', f: 1 }],
+      [{ s: 'amex', t: 'tg', f: 0 }, { s: 'citi', t: 'tg', f: 1 }, { s: 'chase', t: 'tg', f: 0 }, { s: 'spg', t: 'tg', f: 1 }, { s: 'marriott', t: 'tg', f: 0 }],
+      [{ s: 'amex', t: 'tk', f: 0 }, { s: 'citi', t: 'tk', f: 0 }, { s: 'chase', t: 'tk', f: 0 }, { s: 'spg', t: 'tk', f: 0 }, { s: 'marriott', t: 'tk', f: 1 }],
+      [{ s: 'amex', t: 'ua', f: 0 }, { s: 'citi', t: 'ua', f: 0 }, { s: 'chase', t: 'ua', f: 1 }, { s: 'spg', t: 'ua', f: 1 }, { s: 'marriott', t: 'ua', f: 1 }],
+    ]
+  }];
+
+  var flatRelations = _.flattenDeep([
+    _.map(_.find(relations, o => o.type === 'oneworld').relations, o => Object.assign(o, { type: 'oneworld'})),
+    _.map(_.find(relations, o => o.type === 'skyteam').relations, o => Object.assign(o, { type: 'skyteam'})),
+    _.map(_.find(relations, o => o.type === 'nonAliance').relations, o => {
+      if (_.filter(o, oo => oo.f === 1).length > 0) {
+        return _.map(_.filter(o, oo => oo.f === 1), oo => Object.assign(oo, { type: 'nonAliance'}));
+      } else { return { s: 'none', t: o[0].t, type: 'nonAliance' }; }
+    }),
+    _.map(_.find(relations, o => o.type === 'starAlliance').relations, o => {
+      if (_.filter(o, oo => oo.f === 1).length > 0) {
+        return _.map(_.filter(o, oo => oo.f === 1), oo => Object.assign(oo, { type: 'starAlliance'}));
+      } else { return { s: 'none', t: o[0].t, type: 'starAlliance' }; }
+    }),
+  ]);
+
+  // flatRelations = _.orderBy(flatRelations, 's');
+  console.log(flatRelations);
+  flatRelations = _.filter(flatRelations, o => { console.log(o); return o.s !== 'marriott' })
+
+  let left = 0;
+  let right = 0;
+  // console.log('Num of flatRelations', flatRelations.length);
+  var links = _.map(flatRelations, o => {
+    if (o.type === 'starAlliance' || o.type === 'nonAliance') {
+      left += 1;
+      var target = _.findIndex(nodes, oo => oo.sc === o.s);
+      var source = _.findIndex(nodes, oo => oo.sc === o.t);
+    } else {
+      right += 1;
+      var source = _.findIndex(nodes, oo => oo.sc === o.s);
+      var target = _.findIndex(nodes, oo => oo.sc === o.t);
+    }
+    var value = 1 / _.filter(flatRelations, oo => oo.t === o.t).length;
+    return { source, target, value };
+  });
+  // console.log(left, right);
+
+  links = _.orderBy(links, 'target.sc');
+  // console.log('links', links);
+  // console.log('nodes', nodes);
+
+  var data = {
+    nodes, links,
+  }
+
+  var spgColor = '#493266';
+  var marriottColor = '#D32F2F';
+  var amexColor = '#2E7D32';
+  var chaseColor = '#1565C0';
+  var citiColor = '#FDD835';
+  var noneColor = '#BDBDBD';
+
+  var rates = {
+    "citi"    : {
+      cx: "1:1",
+      ey: "1:1",
+      br: "1:1",
+      af: "1:1",
+      kl: "1:1",
+      vs: "1:1",
+      sq: "1:1",
+      tg: "1:1",
+      mh: "1:1",
+      qf: "1:1",
+      qr: "1:1",
+      ga: "1:1",
+      b6: "1:0.75",
+    },
+    "chase"   : {
+      ba: "1:1",
+      wn: "1:1",
+      vs: "1:1",
+      sq: "1:1",
+      ua: "1:1",
+      af: "1:1",
+      ke: "1:1",
+      kl: "1:1"
+    },
+    "amex"    : {
+      ek: "1:1",
+      ly: "1:0.02",
+      ey: "1:1",
+      ha: "1:1",
+      b6: "1:0.8",
+      vx: "1:0.5",
+      ac: "1:1",
+      nh: "1:1",
+      sq: "1:1",
+      ba: "1:0.8",
+      cx: "1:1",
+      ib: "1:0.8",
+      am: "1:1.6",
+      af: "1:1",
+      az: "1:1",
+      dl: "1:1",
+      kl: "1:1",
+      vs: "1:1",
+    },
+    "spg"     : {
+      as: "1:1.25",
+      ek: "1:1.25",
+      ey: "1:1.25",
+      g3: "1:0.625",
+      hu: "1:1.25",
+      ha: "1:1.25",
+      vs: "1:1.25",
+      va: "1:1.25",
+      a3: "1:1.25",
+      ac: "1:1.25",
+      ca: "1:1.25",
+      nz: "1:0.019",
+      nh: "1:1.25",
+      oz: "1:1.25",
+      av: "1:1.25",
+      lh: "1:1.25",
+      sq: "1:1.25",
+      tg: "1:1.25",
+      ua: "1:0.625",
+      ab: "1:1.25",
+      aa: "1:1.25",
+      ba: "1:1.25",
+      cx: "1:1.25",
+      jl: "1:1.25",
+      la: "1:1.875",
+      qr: "1:1.25",
+      am: "1:1.25",
+      af: "1:1.25",
+      az: "1:1.25",
+      mu: "1:1.25",
+      cz: "1:1.25",
+      dl: "1:1.25",
+      kl: "1:1.25",
+      ke: "1:1.25",
+      sv: "1:1.25",
+    },
+    "marriott": {
+      ua: "1:1.1",
+      am: "1:1",
+      ac: "1:1",
+      as: "1:1",
+      aa: "1:1",
+      ba: "1:1",
+      cm: "1:1",
+      dl: "1:1",
+      f9: "1:1",
+      g3: "1:1",
+      ha: "1:1",
+      ib: "1:1",
+      vs: "1:1",
+      wn: "1:1",
+      su: "1:0.7",
+      ab: "1:0.7",
+      ca: "1:0.7",
+      af: "1:0.7",
+      kl: "1:0.7",
+      cx: "1:0.7",
+      oz: "1:0.7",
+      av: "1:0.7",
+      mu: "1:0.7",
+      cz: "1:0.7",
+      ek: "1:0.7",
+      ey: "1:0.7",
+      jl: "1:0.7",
+      ke: "1:0.7",
+      la: "1:0.7",
+      lh: "1:0.7",
+      qf: "1:0.7",
+      qr: "1:0.7",
+      sv: "1:0.7",
+      sq: "1:0.7",
+      sa: "1:0.7",
+      tp: "1:0.7",
+      tk: "1:0.7",
+      b6: "1:0.5",
+      vx: "1:0.5",
+    },
+  };
+
+  var chart = d3.select("#chart").append("svg").chart("Sankey.Path");
+  chart
+  // .name(label)
+  .colorNodes(function(name, node) {
+    if (_.find(flatAirlines, o => o.name === name)) {
+      // return _.find(flatAirlines, o => o.name === name).color;
+      return null;
+    }
+    if (node.sc === 'spg') { return spgColor; }
+    if (node.sc === 'marriott') { return marriottColor; }
+    if (node.sc === 'amex') { return amexColor; }
+    if (node.sc === 'chase') { return chaseColor; }
+    if (node.sc === 'citi') { return citiColor; }
+  })
+  .colorLinks(function(link) {
+    if ([link.source.sc, link.target.sc].indexOf('spg') >= 0) { return spgColor; }
+    if ([link.source.sc, link.target.sc].indexOf('marriott') >= 0) { return marriottColor; }
+    if ([link.source.sc, link.target.sc].indexOf('chase') >= 0) { return chaseColor; }
+    if ([link.source.sc, link.target.sc].indexOf('citi') >= 0) { return citiColor; }
+    if ([link.source.sc, link.target.sc].indexOf('amex') >= 0) { return amexColor; }
+    if ([link.source.sc, link.target.sc].indexOf('none') >= 0) { return noneColor; }
+  })
+  .on("link:mouseover", (link) => {
+    var $box = $("#box"),
+    target = link.target,
+    source = link.source;
+
+    if (source.sc === "citi" || source.sc === "amex" || source.sc === "chase" || source.sc === "marriott" || source.sc === "spg" || source.sc === "none") {
+      [target, source] = [source, target];
+    }
+    rate = rates[target.sc] ? (rates[target.sc][source.sc] || "?:?") : "?:?";
+
+    $box.show()
+    .html(`${target.name} <strong>${rate}</strong> ${source.name}`);
+    var x = (target.x + target.dx + source.x + source.dx - $box.width()) / 2 + $("#chart").position().left,
+    y = (target.y + target.dy + source.y + source.dy + link.dy - $box.height()) / 2;
+    $box.css({
+      top : y + "px",
+      left: x + "px",
+    });
+  })
+  .on("link:mouseout", () => {
+    $("#box").hide();
+  })
+  .nodeWidth(15)
+  .nodePadding(3)
+  .spread(true)
+  .iterations(0)
+  .draw(data);
+
+  _.map(flatAirlines, o => {
+    const iata = o.name.toLowerCase().match(/\[.{2}\]/)[0].replace('[', '').replace(']', '').toUpperCase();
+    const dataId = `[data-node-id="${o.name.toLowerCase().replace(/\s/g, '-')}"]`
+    // console.log(`${dataId} rect`, o);
+    if(iata === 'WN') {
+      SVG.select(`${dataId} rect.airlineLogo`).fill(SVG('fake').image(`https://lh3.googleusercontent.com/IpiXqIBr4B99QOtMfEvSDuexAjfU_4_iIoavrTl_b4k9UGXWFONBvnScETl0UDsVdg=w300`, 15, 15));
+    } else {
+      SVG.select(`${dataId} rect.airlineLogo`).fill(SVG('fake').image(`https://www.gstatic.com/flights/airline_logos/35px/${iata}.png`, 15, 15));
+    }
+    SVG.select(`${dataId} rect.allianceLogo`).fill(SVG('fake').image(`http://cdn.yeekapp.com/wings/${o.type}.png?x-oss-process=image/resize,w_20,limit_1/format,jpg/interlace,1`, 15, 15));
+  })
+
+  </script>
+
+</body>
+</html>
