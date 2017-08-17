@@ -317,8 +317,8 @@
   }];
 
   var flatRelations = _.flattenDeep([
-    _.map(_.find(relations, o => o.type === 'oneworld').relations, o => Object.assign(o, { type: 'oneworld'})),
     _.map(_.find(relations, o => o.type === 'skyteam').relations, o => Object.assign(o, { type: 'skyteam'})),
+    _.map(_.find(relations, o => o.type === 'oneworld').relations, o => Object.assign(o, { type: 'oneworld'})),
     _.map(_.find(relations, o => o.type === 'nonAliance').relations, o => {
       if (_.filter(o, oo => oo.f === 1).length > 0) {
         return _.map(_.filter(o, oo => oo.f === 1), oo => Object.assign(oo, { type: 'nonAliance'}));
@@ -331,9 +331,12 @@
     }),
   ]);
 
+  // flatRelations = _.shuffle(flatRelations);
+  // flatRelations = _.shuffle(flatRelations);
+
   // flatRelations = _.orderBy(flatRelations, 's');
-  console.log(flatRelations);
-  flatRelations = _.filter(flatRelations, o => { console.log(o); return o.s !== 'marriott' })
+  // console.log(flatRelations);
+  // flatRelations = _.filter(flatRelations, o => { console.log(o); return o.s !== 'marriott' })
 
   let left = 0;
   let right = 0;
@@ -353,7 +356,7 @@
   });
   // console.log(left, right);
 
-  links = _.orderBy(links, 'target.sc');
+  // links = _.orderBy(links, 'target.sc');
   // console.log('links', links);
   // console.log('nodes', nodes);
 
