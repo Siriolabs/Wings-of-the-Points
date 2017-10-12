@@ -111,7 +111,7 @@
     });
 
     let nodes = remoteNodes;
-    nodes = _.orderBy(nodes, ['alliance', (o) => { if (o.name === 'NA') {return 'z'} else {return o.name.slice(0, 1).toLowerCase()}}], ['asc', 'asc']);
+    nodes = _.orderBy(nodes, ['alliance', (o) => { if (o.name === 'NA') {return 'z'} else {return o.name.slice(0, 5).toLowerCase()}}], ['asc', 'asc']);
 
     flatRelations = temp;
 
