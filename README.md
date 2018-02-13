@@ -24,6 +24,14 @@ The transfer ratio of Marriott requires a minimum of 70,000 Marriott Rewards poi
 
 > Marriott Webpage: [http://www.marriott.com/rewards/usepoints/morerew.mi](http://www.marriott.com/rewards/usepoints/morerew.mi)
 
+## Change Log
+### 2018-02-14
+1. Remove Virgin America as transfer agreements have ended.
+2. Add Cathay Dragon to Amex, Citi, Marriott, SPG as they share Asia Miles with CX.
+3. Add Aer Lingus AerClub and Iberia to Chase as these can be transferred directly as of 11/2017.
+> Special thanks to To US Credit Card Guide Reader Stephen7 !! http://disq.us/p/1q3i6r0
+
+
 ## Contributors
 
 * [Martin Gao](http://www.yeekapp.com) (The original author and the owner of this chart)
