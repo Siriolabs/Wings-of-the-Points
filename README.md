@@ -14,7 +14,7 @@ Live Demo -> [https://siriolabs.github.io/Wings-of-the-Points/index.html](https:
 ## Note
 
 ### SPG
-The transfer ratio of SPG has already considered the 5,000 bonus Starpoints for every 20,000 you transfer at a time. 
+The transfer ratio of SPG has already considered the 5,000 bonus miles for every 20,000 Starpoints you transfer at a time. 
 
 ### Marriott
 The transfer ratio of Marriott requires a minimum of 70,000 Marriott Rewards points at a time (56,000 for UA). If you did not have enough Marriott Reward points, the actual transfer ratio would be lower.
