@@ -13,18 +13,16 @@ Live Demo -> [https://siriolabs.github.io/Wings-of-the-Points/index.html](https:
 
 ## Note
 
-### SPG
-The transfer ratio of SPG has already considered the 5,000 bonus Starpoints for every 20,000 you transfer at a time. 
-
-### Marriott
-The transfer ratio of Marriott requires a minimum of 70,000 Marriott Rewards points at a time (56,000 for UA). If you did not have enough Marriott Reward points, the actual transfer ratio would be lower.
-
-![alt text](https://raw.githubusercontent.com/Siriolabs/Wings-of-the-Points/master/Marriott-Ratio.png)
-
-
-> Marriott Webpage: [http://www.marriott.com/rewards/usepoints/morerew.mi](http://www.marriott.com/rewards/usepoints/morerew.mi)
+After merging with SPG in Aug 2018, you can now transfer Marriott points to airline miles at 3 to 1 ratio with most programs, and as a bonus, Marriott will add 15,000 points for every 60,000 points you transfer to airline miles. This 3:1.25 ratio is equivalent to the previous SPG program.
 
 ## Change Log
+
+### 2018-09-04
+1. Dealt with the Marriott/SPG merger mess.
+2. Added Avianca to Citi TYP as they have a new partnership as of 11/2017.
+3. Removed Korean Air from Chase UR as transfer agreements have ended as of 08/2018.
+4. Added JetBlue to Chase UR as they have a new partnership as of 08/2018.
+
 ### 2018-02-14
 1. Remove Virgin America as transfer agreements have ended.
 2. Add Cathay Dragon to Amex, Citi, Marriott, SPG as they share Asia Miles with CX.
